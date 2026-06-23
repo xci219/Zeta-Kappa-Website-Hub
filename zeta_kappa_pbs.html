@@ -573,8 +573,8 @@
         body: "The Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc. stands as a proud pillar of Brotherhood, Scholarship, and Service. Since our chartering, we have worked tirelessly to uplift our community, develop future leaders, and carry forward the mission established by our founders on January 9, 1914 at Howard University.",
         timeline: [
           { year: 'January 9th, 1914', title: 'Phi Beta Sigma Founded',      body: 'Phi Beta Sigma Fraternity, Inc. is founded on January 9, 1914 at Howard University in Washington, D.C. by A. Langston Taylor, Leonard F. Morse, and Charles I. Brown.' },
-          { year: 'March 1st, 1974', title: 'Zeta Kappa Chapter Chartering', body: body: 'The World Famous Zeta Kappa Chapter was chartered on March 1st, 1974 by 13 individuals who came together at a predominantly white institution to create meaningful change and expand opportunities for Black students at the University of Florida.' },
-          { year: 'March 1st, 2024', title: 'Zeta Kappa 50th Anniversary',   body: body: 'The World Famous Zeta Kappa Chapter celebrated its 50th Anniversary on March 1st, 2024. Alumni from across generations returned to honor the chapter\'s rich legacy and celebrate 50 years of Brotherhood, Scholarship, and Service.' },
+          { year: 'March 1st, 1974', title: 'Zeta Kappa Chapter Chartering', body: 'The World Famous Zeta Kappa Chapter was chartered on March 1st, 1974 by 13 individuals who came together at a predominantly white institution to create meaningful change and expand opportunities for Black students at the University of Florida.' },
+          { year: 'March 1st, 2024', title: 'Zeta Kappa 50th Anniversary',   body: 'The World Famous Zeta Kappa Chapter celebrated its 50th Anniversary on March 1st, 2024. Alumni from across generations returned to honor the chapter\'s rich legacy and celebrate 50 years of Brotherhood, Scholarship, and Service.' },
           { year: 'Present',       title: 'Continuing the Legacy',           body: 'Currently, the Zeta Kappa Chapter continues to grow, serve, and lead — upholding the values of our founders and building towards a brighter future for the next generation of Phi Beta Sigma men.' },
         ]
       },
@@ -708,8 +708,16 @@
         <div class="contact-item"><div class="contact-item-icon"><i class="ti ti-phone"></i></div><div><h4>Phone</h4><p>${c.phone}</p></div></div>
         <div class="contact-item"><div class="contact-item-icon"><i class="ti ti-map-pin"></i></div><div><h4>Location</h4><p>${c.location}</p></div></div>`;
       cs.innerHTML = `
-        <a class="social-link" href="${c.instagram}" target="_blank">
-        <a class="social-link" href="${c.facebook}" target="_blank">   
+  <a class="social-link" href="${c.instagram}" target="_blank">
+    <i class="ti ti-brand-instagram social-icon"></i>
+    <span>Instagram</span>
+  </a>
+
+  <a class="social-link" href="${c.facebook}" target="_blank">
+    <i class="ti ti-brand-facebook social-icon"></i>
+    <span>Facebook</span>
+  </a>
+`;
     }
 
     function renderLinks() {
