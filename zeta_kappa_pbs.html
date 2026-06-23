@@ -416,7 +416,7 @@
       <div class="section-banner-content">
         <div class="label">Leadership</div>
         <h2>Chapter Officers</h2>
-        <p>Meet the 2026-2027 Executive Board of the Zeta Kappa Chapter of Phi Beta Sigma Fraternity Inc.</p>
+        <p>Meet the 2026–2027 Executive Board of the World Famous Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc.</p>
       </div>
     </div>
     <section class="section">
@@ -466,7 +466,7 @@
       <div class="section-banner-content">
         <div class="label">Our Story</div>
         <h2>Chapter History</h2>
-        <p>From our founding on March 1st, 1974 at the University of Florida, here is the history of th .</p>
+        <p>From our founding on March 1st, 1974 at the University of Florida, here is the history of the World Famous Zeta Kappa Chapter.</p>
       </div>
     </div>
     <section class="section">
@@ -544,12 +544,12 @@
     const data = {
       officers: [
         /* ── Add photo: 'images/officers/name.jpg' to any entry ── */
-        { title: 'President',          name: 'Saugat Shresta',   photo: '' },
+        { title: 'President',          name: 'Saugat Shrestha',   photo: '' },
         { title: '1st Vice President', name: 'Alvin Tuma',       photo: '' },
         { title: '2nd Vice President', name: 'Gabriel Henry',  photo: '' },
         { title: 'Treasurer',          name: 'Xciden Griffiths', photo: '' },
         { title: 'Secretary', name: 'Jeremiah Samuel',    photo: '' },
-        { title: 'Parlimentarian',     name: 'Geoffrey Pierre',  photo: '' },
+        { title: 'Parliamentarian',     name: 'Geoffrey Pierre',  photo: '' },
       ],
       forms: [
         { title: 'Interest Form',             desc: 'Interested in learning more about membership? Start here.',  url: '#', icon: 'ti-user-plus'       },
@@ -560,8 +560,8 @@
         email:     'ufzetakappa1974@gmail.com',
         phone:     '954-702-5601',
         location:  'Gainesville, Florida',
-        instagram: '@ufsigmas',
-        facebook:  'UF Sigmas',
+        instagram: 'https://instagram.com/ufsigmas',
+        facebook: 'https://facebook.com/ufsigmas'
       },
       links: [
         { title: 'Phi Beta Sigma National Website', url: 'https://phibetasigma1914.org', cat: 'Official'  },
@@ -573,8 +573,8 @@
         body: "The Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc. stands as a proud pillar of Brotherhood, Scholarship, and Service. Since our chartering, we have worked tirelessly to uplift our community, develop future leaders, and carry forward the mission established by our founders on January 9, 1914 at Howard University.",
         timeline: [
           { year: 'January 9th, 1914', title: 'Phi Beta Sigma Founded',      body: 'Phi Beta Sigma Fraternity, Inc. is founded on January 9, 1914 at Howard University in Washington, D.C. by A. Langston Taylor, Leonard F. Morse, and Charles I. Brown.' },
-          { year: 'March 1st, 1974', title: 'Zeta Kappa Chapter Chartering', body: 'The World Famous Zeta Kappa Chapter was chartered on March 1st, 1974 by 13 individuals who came together on a perdomenantely white instution to bring about change and impact at the University of Florida .' },
-          { year: 'March 1st, 2024', title: 'Zeta Kappa 50th Anniversary',   body: 'The World Famous Zeta Kappa Chapter celebrated it's 50th Anniversary on March 1st, 2024, this celebration brought back years of alumni who celebrated the chapters history over the past 50 years of brotherhood, scholarship, and service.' },
+          { year: 'March 1st, 1974', title: 'Zeta Kappa Chapter Chartering', body: body: 'The World Famous Zeta Kappa Chapter was chartered on March 1st, 1974 by 13 individuals who came together at a predominantly white institution to create meaningful change and expand opportunities for Black students at the University of Florida.' },
+          { year: 'March 1st, 2024', title: 'Zeta Kappa 50th Anniversary',   body: body: 'The World Famous Zeta Kappa Chapter celebrated its 50th Anniversary on March 1st, 2024. Alumni from across generations returned to honor the chapter\'s rich legacy and celebrate 50 years of Brotherhood, Scholarship, and Service.' },
           { year: 'Present',       title: 'Continuing the Legacy',           body: 'Currently, the Zeta Kappa Chapter continues to grow, serve, and lead — upholding the values of our founders and building towards a brighter future for the next generation of Phi Beta Sigma men.' },
         ]
       },
@@ -674,7 +674,7 @@
       if (!g) return;
       g.innerHTML = data.officers.map(o => {
         const avatarInner = o.photo
-          ? `<img src="${o.photo}" alt="${o.name}" />`
+          ? `<img src="${o.photo}" alt="${o.name} - ${o.title}" />`
           : getInitials(o.name);
         return `
           <div class="officer-card">
@@ -708,8 +708,8 @@
         <div class="contact-item"><div class="contact-item-icon"><i class="ti ti-phone"></i></div><div><h4>Phone</h4><p>${c.phone}</p></div></div>
         <div class="contact-item"><div class="contact-item-icon"><i class="ti ti-map-pin"></i></div><div><h4>Location</h4><p>${c.location}</p></div></div>`;
       cs.innerHTML = `
-        <a class="social-link" href="#"><i class="ti ti-brand-instagram social-icon"></i>${c.instagram}</a>
-        <a class="social-link" href="#"><i class="ti ti-brand-facebook social-icon"></i>${c.facebook}</a>`;
+        <a class="social-link" href="${c.instagram}" target="_blank">
+        <a class="social-link" href="${c.facebook}" target="_blank">   
     }
 
     function renderLinks() {
