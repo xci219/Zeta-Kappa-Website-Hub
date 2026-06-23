@@ -310,6 +310,17 @@
     .link-card h4 { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
     .link-arrow { margin-left: auto; color: var(--muted); font-size: 19px; flex-shrink: 0; }
 
+    /* ── ACCOMPLISHMENTS (NEW) ── */
+    .accomplishments-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 18px; }
+    .acc-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 18px; transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+    .acc-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px var(--royal-glow); }
+    .acc-year { font-size: 12px; color: var(--royal); font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+    .acc-name { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--text); margin-bottom: 6px; }
+    .acc-desc { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
     /* ── HISTORY ── */
     .history-intro {
       background: linear-gradient(135deg, #0a1840, #1a3a8f);
@@ -422,6 +433,7 @@
       <button onclick="showPage('forms',this)">Forms</button>
       <button onclick="showPage('contact',this)">Contact</button>
       <button onclick="showPage('links',this)">Links</button>
+      <button onclick="showPage('accomplishments',this)">Accomplishments</button>
       <button onclick="showPage('history',this)">History</button>
       <button onclick="showPage('gallery',this)">Gallery</button>
     </div>
@@ -465,7 +477,7 @@
       <div class="section-header">
         <div class="label">Who We Are</div>
         <h2>The World Famous Zeta Kappa</h2>
-        <p>Founded on the principles of Brotherhood, Scholarship, and Service, the Zeta Kappa Chapter proudly represents Phi Beta Sigma Fraternity, Inc. — making a lasting impact in our community and beyond. We stand on the shoulders of those who came before us, and we serve those who will come after.</p>
+        <p>Founded on the principles of Brotherhood, Scholarship, and Service, the Zeta Kappa Chapter proudly represents Phi Beta Sigma Fraternity, Inc. — making a lasting impact in our community an[...]
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;text-align:center;">
         <div class="stat-card"><div class="stat-num">1914</div><div class="stat-label">Founded Nationally</div></div>
@@ -527,6 +539,20 @@
     </section>
   </div>
 
+  <!-- ══ ACCOMPLISHMENTS ══ -->
+  <div id="page-accomplishments" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Achievements</div>
+        <h2>Brother Accomplishments</h2>
+        <p>Recognition of our brothers' accomplishments and the year they were achieved.</p>
+      </div>
+      <div class="accomplishments-grid" id="accomplishments-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+  </div>
+
   <!-- ══ HISTORY ══ -->
   <div id="page-history" class="page">
     <section class="section">
@@ -576,7 +602,7 @@
   </footer>
 
   <script>
-    /* ── DATA (unchanged from your file) ── */
+    /* ── DATA (unchanged from your file, plus accomplishments) ── */
     const data = {
       officers: [
         { title: 'President',          name: 'Saugat Shresta'   },
@@ -603,13 +629,19 @@
         { title: 'Community Partners',               url: '#',                             cat: 'Community' },
       ],
       history: {
-        body: "The Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc. stands as a proud pillar of Brotherhood, Scholarship, and Service. Since our chartering, we have worked tirelessly to uplift our community, develop future leaders, and carry forward the mission established by our founders on January 9, 1914 at Howard University. Edit this section to tell your chapter's unique story.",
+        body: "The Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc. stands as a proud pillar of Brotherhood, Scholarship, and Service. Since our chartering, we have worked tirelessly to uplift ou[...]",
         timeline: [
-          { year: '1914',        title: 'Phi Beta Sigma Founded',          body: 'Phi Beta Sigma Fraternity, Inc. is founded on January 9, 1914 at Howard University in Washington, D.C. by A. Langston Taylor, Leonard F. Morse, and Charles I. Brown.' },
+          { year: '1914',        title: 'Phi Beta Sigma Founded',          body: 'Phi Beta Sigma Fraternity, Inc. is founded on January 9, 1914 at Howard University in Washington, D.C. by A. Langston [...]' },
           { year: 'March 1, 1974', title: 'Zeta Kappa Chapter Chartering', body: 'The World Famous Zeta Kappa Chapter was chartered on March 1st, 1974 by 13 Degrees of Intellectual Blackness.' },
-          { year: 'Present',     title: 'Continuing the Legacy',           body: 'Currently, the Zeta Kappa Chapter continues to grow, serve, and lead upholding the values of our founders and building towards a brighter future for the next generation of Phi Beta Sigma men.' },
+          { year: 'Present',     title: 'Continuing the Legacy',           body: 'Currently, the Zeta Kappa Chapter continues to grow, serve, and lead upholding the values of our founders and building[...]' },
         ]
       },
+      // Add accomplishments array where you can list brother accomplishments and year
+      accomplishments: [
+        // Example entries (remove or edit as needed)
+        { name: 'Saugat Shresta', accomplishment: 'Led community tutoring program', year: '2024' },
+        { name: 'Alvin Tuma', accomplishment: 'Organized campus blood drive', year: '2025' }
+      ],
       gallery: []
     };
 
@@ -634,7 +666,9 @@
     function showPage(id, btn) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
-      document.getElementById('page-' + id).classList.add('active');
+      const page = document.getElementById('page-' + id);
+      if (!page) return;
+      page.classList.add('active');
       if (btn) btn.classList.add('active');
       renderAll();
     }
@@ -688,7 +722,7 @@
         </div>
         <div class="contact-item">
           <div class="contact-item-icon"><i class="ti ti-phone"></i></div>
-          <div><h4>Phone</h4><p>${c.phone}</p></div>
+          <div><h4>Phone</h4><p>${c.phone || '—'}</p></div>
         </div>
         <div class="contact-item">
           <div class="contact-item-icon"><i class="ti ti-map-pin"></i></div>
@@ -709,6 +743,22 @@
           <div><div class="link-badge">${l.cat}</div><h4>${l.title}</h4></div>
           <i class="ti ti-arrow-right link-arrow"></i>
         </a>
+      `).join('');
+    }
+
+    function renderAccomplishments() {
+      const g = document.getElementById('accomplishments-grid');
+      if (!g) return;
+      if (!data.accomplishments || data.accomplishments.length === 0) {
+        g.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">No accomplishments listed yet. Add entries to the <code>data.accomplishments</code> array in the script.</div>`;
+        return;
+      }
+      g.innerHTML = data.accomplishments.map(a => `
+        <div class="acc-card">
+          <div class="acc-year">${a.year}</div>
+          <div class="acc-name">${a.name}</div>
+          <div class="acc-desc">${a.accomplishment}</div>
+        </div>
       `).join('');
     }
 
@@ -751,6 +801,7 @@
       renderForms();
       renderContact();
       renderLinks();
+      renderAccomplishments();
       renderHistory();
       renderGallery();
     }
