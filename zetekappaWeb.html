@@ -58,6 +58,87 @@
       transition: background 0.3s, color 0.3s;
     }
 
+    /* ══════════════════════════════
+       BLURRED SECTION BANNERS
+       Replace the url() values with
+       your own image paths when ready
+    ══════════════════════════════ */
+ 
+    /* Base style shared by all section banners */
+    .section-banner {
+      position: relative; overflow: hidden;
+      min-height: 220px; display: flex;
+      align-items: center; justify-content: center;
+      text-align: center;
+    }
+ 
+    /* The blurred background image layer */
+    .section-banner::before {
+      content: '';
+      position: absolute; inset: -20px;   /* slightly larger so blur edge doesn't show */
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px) brightness(0.38) saturate(0.7);
+      z-index: 0;
+      transition: filter 0.3s;
+    }
+ 
+    /* Dark overlay tint on top of the blur */
+    .section-banner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(10,28,80,0.55) 0%,
+        rgba(26,58,143,0.38) 100%
+      );
+      z-index: 1;
+    }
+ 
+    /* Content sits above both layers */
+    .section-banner-content {
+      position: relative; z-index: 2;
+      padding: 48px 2rem;
+    }
+    .section-banner-content .label {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: #a8c0ff; font-weight: 500; margin-bottom: 10px;
+    }
+    .section-banner-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px,4vw,42px); color: #fff; font-weight: 900;
+      text-shadow: 0 2px 18px rgba(0,0,0,0.45);
+    }
+    .section-banner-content p {
+      color: rgba(255,255,255,0.72); font-size: 15px;
+      margin-top: 10px; max-width: 520px;
+    }
+ 
+    /* ── Per-page banner images ──
+       Swap in your real photo URLs here.
+       These are placeholder gradients that look
+       great until you have real images. */
+    #banner-officers::before {
+      background-image:
+        /* REPLACE with: url('images/officers-bg.jpg') */
+        linear-gradient(160deg,#0a1840,#1a3a8f,#2a52c9);
+    }
+    #banner-history::before {
+      background-image:
+        /* REPLACE with: url('images/history-bg.jpg') */
+        linear-gradient(160deg,#0d1530,#1a3a8f,#163380);
+    }
+    #banner-accomplishments::before {
+      background-image:
+        /* REPLACE with: url('images/accomplishments-bg.jpg') */
+        linear-gradient(160deg,#091228,#1a3a8f,#0d2b72);
+    }
+    #banner-gallery::before {
+      background-image:
+        /* REPLACE with: url('images/gallery-bg.jpg') */
+        linear-gradient(160deg,#0a1840,#1e44a8,#2a52c9);
+    }
+
     /* ── DARK MODE TOGGLE ── */
     .dm-toggle {
       display: flex; align-items: center; gap: 8px;
@@ -348,6 +429,81 @@
     .timeline-item h4 { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--text); margin-bottom: 8px; }
     .timeline-item p { color: var(--muted); font-size: 14px; line-height: 1.65; }
 
+     /* ══════════════════════════════
+       ACCOMPLISHMENTS
+    ══════════════════════════════ */
+    .accomplishments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-bottom: 56px;
+    }
+    .accomplishment-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .accomplishment-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--royal), var(--royal-light));
+    }
+    .accomplishment-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px var(--royal-glow);
+    }
+    .accomplishment-icon {
+      width: 54px; height: 54px;
+      background: linear-gradient(135deg, var(--royal-dark), var(--royal));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 26px;
+      flex-shrink: 0;
+    }
+    .accomplishment-year {
+      font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--royal); font-weight: 600;
+    }
+    .accomplishment-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; color: var(--text); font-weight: 700;
+      line-height: 1.3;
+    }
+    .accomplishment-card p {
+      color: var(--muted); font-size: 14px; line-height: 1.65; flex: 1;
+    }
+    .accomplishment-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg2); color: var(--royal);
+      border: 1px solid var(--border);
+      font-size: 11px; font-weight: 500; letter-spacing: 1px;
+      text-transform: uppercase; padding: 5px 12px;
+      border-radius: 50px; width: fit-content;
+    }
+ 
+    /* Highlight / featured accomplishment — spans 2 cols if room */
+    .accomplishment-card.featured {
+      grid-column: span 2;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 28px;
+    }
+    .accomplishment-card.featured .accomplishment-icon {
+      width: 64px; height: 64px; font-size: 30px; flex-shrink: 0;
+    }
+    @media (max-width: 680px) {
+      .accomplishment-card.featured { grid-column: span 1; flex-direction: column; }
+    }
+
     /* ── GALLERY ── */
     .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 16px; }
     .gallery-card {
@@ -542,6 +698,35 @@
     </section>
   </div>
 
+  
+  <!-- ══ ACCOMPLISHMENTS ══ -->
+  <div id="page-accomplishments" class="page">
+    <div class="section-banner" id="banner-accomplishments">
+      <div class="section-banner-content">
+        <div class="label">Chapter Excellence</div>
+        <h2>Accomplishments</h2>
+        <p>A legacy of service, scholarship, and brotherhood recognized at every level.</p>
+      </div>
+    </div>
+    <section class="section">
+      <div class="accomplishments-grid" id="accomplishments-grid"></div>
+      <!--
+        ═══════════════════════════════════════════════════════
+        HOW TO ADD ACCOMPLISHMENTS:
+        Edit the data.accomplishments array in the <script>
+        below. Each entry has:
+          title   — accomplishment name
+          year    — year or academic year (e.g. '2023–24')
+          desc    — short description
+          icon    — any Tabler icon class (ti-trophy, ti-star,
+                    ti-award, ti-medal, ti-certificate, etc.)
+          tag     — category badge text
+          featured — (optional) set true to make card wider
+        ═══════════════════════════════════════════════════════
+      -->
+    </section>
+  </div>
+
   <!-- ══ GALLERY ══ -->
   <div id="page-gallery" class="page">
     <section class="section">
@@ -610,6 +795,57 @@
           { year: 'Present',     title: 'Continuing the Legacy',           body: 'Currently, the Zeta Kappa Chapter continues to grow, serve, and lead upholding the values of our founders and building towards a brighter future for the next generation of Phi Beta Sigma men.' },
         ]
       },
+       /*
+        ══════════════════════════════════════════════════════════
+        ACCOMPLISHMENTS — edit freely.
+        Icons reference: https://tabler.io/icons
+        featured: true  → card spans 2 columns (on wider screens)
+        ══════════════════════════════════════════════════════════
+      */
+      accomplishments: [
+        {
+          title:    'Chapter of the Year',
+          year:     '2023–24',
+          desc:     'Recognized as Chapter of the Year at the Southeastern Regional Conference for outstanding service, programming, and brotherhood development.',
+          icon:     'ti-trophy',
+          tag:      'Regional Award',
+          featured: true,
+        },
+        {
+          title:    'Community Service Excellence',
+          year:     '2023',
+          desc:     'Logged over 500 hours of community service across Gainesville and Alachua County, partnering with local nonprofits and schools.',
+          icon:     'ti-heart-handshake',
+          tag:      'Service',
+        },
+        {
+          title:    'Scholarship Recipients',
+          year:     '2023–24',
+          desc:     'Three active brothers received the Phi Beta Sigma National Foundation scholarship for academic achievement and community impact.',
+          icon:     'ti-school',
+          tag:      'Scholarship',
+        },
+        {
+          title:    'Step Show Champions',
+          year:     '2024',
+          desc:     'First place at the University of Florida\'s annual Greek Step Show — a demonstration of unity, discipline, and brotherhood.',
+          icon:     'ti-medal',
+          tag:      'Competition',
+        },
+        {
+          title:    'Bigger & Better Business Initiative',
+          year:     '2023',
+          desc:     'Hosted a three-day entrepreneurship workshop series connecting over 80 students with local Black-owned businesses.',
+          icon:     'ti-briefcase',
+          tag:      'Programming',
+        },
+        {
+          title:    'GPA Achievement',
+          year:     '2023–24',
+          desc:     'Chapter maintained a collective GPA above 3.0, ranking among the top fraternities at the University of Florida for academic performance.',
+          icon:     'ti-certificate',
+          tag:      'Academics',
+        },
       gallery: []
     };
 
@@ -727,6 +963,23 @@
       `).join('');
     }
 
+     function renderAccomplishments() {
+      const g = document.getElementById('accomplishments-grid');
+      if (!g) return;
+      g.innerHTML = data.accomplishments.map(a => `
+        <div class="accomplishment-card${a.featured ? ' featured' : ''}">
+          <div class="accomplishment-icon"><i class="ti ${a.icon}"></i></div>
+          <div>
+            <div class="accomplishment-year">${a.year}</div>
+            <h3>${a.title}</h3>
+            <p>${a.desc}</p>
+            <div class="accomplishment-tag">
+              <i class="ti ti-tag" style="font-size:12px;"></i>${a.tag}
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
     function renderGallery() {
       const g = document.getElementById('gallery-grid');
       if (!g) return;
@@ -752,6 +1005,7 @@
       renderContact();
       renderLinks();
       renderHistory();
+      renderAccomplishments();
       renderGallery();
     }
 
