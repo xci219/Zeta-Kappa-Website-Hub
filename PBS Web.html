@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeta Kappa Chapter — Phi Beta Sigma Fraternity, Inc.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+  <style>
+    /* =====================================================
+       1. THEME VARIABLES
+       ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, [data-theme="light"] {
+      --royal: #1a3a8f;
+      --royal-dark: #0f2260;
+      --royal-light: #2a52c9;
+      --royal-glow: rgba(26,58,143,0.14);
+      --bg: #ffffff;
+      --bg2: #f4f6fc;
+      --bg3: #edf0f8;
+      --surface: #ffffff;
+      --muted: #6a7a9d;
+      --text: #0d1b3e;
+      --text-soft: #3a4a6b;
+      --border: rgba(26,58,143,0.13);
+      --border-strong: rgba(26,58,143,0.25);
+      --footer-bg: #0f2260;
+    }
+
+    [data-theme="dark"] {
+      --royal: #4a78e8;
+      --royal-dark: #2a52c9;
+      --royal-light: #6a96ff;
+      --royal-glow: rgba(74,120,232,0.22);
+      --bg: #0a0f1e;
+      --bg2: #111827;
+      --bg3: #1a2236;
+      --surface: #111827;
+      --muted: #8a9bbf;
+      --text: #e8eeff;
+      --text-soft: #b0bedd;
+      --border: rgba(74,120,232,0.18);
+      --border-strong: rgba(74,120,232,0.35);
+      --footer-bg: #060a14;
+    }
+
+    /* =====================================================
+       2. BASE
+       ===================================================== */
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .page { display: none; animation: fadeUp 0.32s ease; }
+    .page.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .section { padding: 72px 2rem; max-width: 980px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-header .label {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--royal); font-weight: 500; margin-bottom: 12px;
+    }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--text); }
+    .section-header p {
+      color: var(--muted); margin: 12px auto 0; font-size: 15px;
+      line-height: 1.7; max-width: 560px;
+    }
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--muted); }
+
+    /* =====================================================
+       3. NAVIGATION + DARK MODE TOGGLE
+       ===================================================== */
+    .nav {
+      background: var(--royal-dark);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 66px; gap: 12px;
+      position: sticky; top: 0; z-index: 200;
+      border-bottom: 2.5px solid var(--royal-light);
+      transition: background 0.3s;
+    }
+    [data-theme="dark"] .nav { background: #060a14; }
+
+    .nav-brand {
+      font-family: 'Playfair Display', serif; color: #fff;
+      font-size: 20px; font-weight: 700; letter-spacing: 0.5px; line-height: 1;
+      display: flex; flex-direction: column; flex-shrink: 0;
+    }
+    .nav-brand span {
+      color: #a8c0ff; font-size: 11px; font-family: 'DM Sans', sans-serif;
+      font-weight: 300; letter-spacing: 2.5px; text-transform: uppercase; margin-top: 3px;
+    }
+    .nav-links { display: flex; gap: 2px; flex-wrap: wrap; }
+    .nav-links button {
+      background: none; border: none; color: rgba(255,255,255,0.72);
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      padding: 8px 13px; border-radius: 6px; cursor: pointer; letter-spacing: 0.4px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .nav-links button:hover, .nav-links button.active { background: rgba(255,255,255,0.13); color: #fff; }
+
+    .dm-toggle {
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+      cursor: pointer; padding: 6px 12px; border-radius: 8px;
+      border: none; background: rgba(255,255,255,0.09); transition: background 0.18s;
+    }
+    .dm-toggle:hover { background: rgba(255,255,255,0.16); }
+    .dm-label {
+      font-size: 11px; color: rgba(255,255,255,0.72); font-weight: 500;
+      letter-spacing: 0.5px; white-space: nowrap;
+    }
+    .dm-switch {
+      width: 36px; height: 20px; background: rgba(255,255,255,0.22);
+      border-radius: 50px; position: relative; transition: background 0.3s; flex-shrink: 0;
+    }
+    .dm-switch::after {
+      content: ''; position: absolute; width: 14px; height: 14px; background: #fff;
+      border-radius: 50%; top: 3px; left: 3px; transition: transform 0.3s;
+    }
+    [data-theme="dark"] .dm-switch { background: var(--royal); }
+    [data-theme="dark"] .dm-switch::after { transform: translateX(16px); }
+
+    /* =====================================================
+       4. HOME (hero, pillars, stats)
+       ===================================================== */
+    .hero {
+      background: linear-gradient(140deg, #0a1840 0%, #1a3a8f 55%, #2a52c9 100%);
+      padding: 88px 2rem 108px; text-align: center; position: relative; overflow: hidden;
+    }
+    [data-theme="dark"] .hero { background: linear-gradient(140deg, #040810 0%, #0d1f50 55%, #1a3a8f 100%); }
+    .hero::before {
+      content: 'ΦΒΣ'; position: absolute; font-family: 'Playfair Display', serif;
+      font-size: 340px; font-weight: 900; color: rgba(255,255,255,0.04);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; user-select: none; white-space: nowrap;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.22); border-radius: 50px; color: #c8d8ff;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      padding: 6px 22px; margin-bottom: 26px; font-weight: 500;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif; color: #fff;
+      font-size: clamp(34px, 5.5vw, 60px); line-height: 1.08; font-weight: 900; margin-bottom: 14px;
+    }
+    .hero h1 em { color: #a8c0ff; font-style: normal; }
+    .hero-sub { color: rgba(255,255,255,0.62); font-size: 16px; font-weight: 300; letter-spacing: 1.2px; margin-bottom: 44px; }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-primary, .btn-outline {
+      padding: 13px 30px; border-radius: 8px; font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 500; cursor: pointer; letter-spacing: 0.3px;
+    }
+    .btn-primary { background: #fff; color: #0f2260; border: none; transition: background 0.18s, transform 0.15s; }
+    .btn-primary:hover { background: #e6ecff; transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,0.38); transition: border-color 0.18s, background 0.18s; }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 3px solid var(--royal); }
+    .pillar { padding: 36px 30px; border-right: 1px solid var(--border); background: var(--bg2); text-align: center; transition: background 0.18s; }
+    .pillar:last-child { border-right: none; }
+    .pillar:hover { background: var(--bg3); }
+    .pillar-icon {
+      width: 50px; height: 50px; background: var(--royal); border-radius: 12px; color: #fff; font-size: 23px;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+    }
+    .pillar h3 { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--text); margin-bottom: 9px; }
+    .pillar p { color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; text-align: center; }
+    .stat-card { padding: 28px 20px; background: var(--bg2); border-radius: 12px; border: 1px solid var(--border); transition: background 0.3s, border 0.3s; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 38px; color: var(--royal); font-weight: 900; }
+    .stat-label { color: var(--muted); font-size: 13px; margin-top: 6px; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* =====================================================
+       5. OFFICERS
+       ===================================================== */
+    .officers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 780px; margin: 0 auto; }
+    .officer-card {
+      background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--royal);
+      border-radius: 14px; padding: 32px 22px; text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    }
+    .officer-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px var(--royal-glow); }
+    .officer-avatar {
+      width: 68px; height: 68px; border-radius: 50%; background: var(--royal); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin: 0 auto 16px;
+    }
+    .officer-pos { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--royal); font-weight: 500; margin-bottom: 7px; }
+    .officer-name { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--text); font-weight: 700; }
+
+    /* =====================================================
+       6. FORMS
+       ===================================================== */
+    .forms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 22px; }
+    .form-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 30px 26px; display: flex; flex-direction: column; gap: 16px;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    }
+    .form-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px var(--royal-glow); }
+    .form-icon { width: 46px; height: 46px; background: var(--bg2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--royal); font-size: 22px; }
+    .form-card h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text); }
+    .form-card p { color: var(--muted); font-size: 14px; line-height: 1.65; flex: 1; }
+    .form-link {
+      display: inline-flex; align-items: center; gap: 8px; width: fit-content;
+      background: var(--royal); color: #fff; border: none; padding: 11px 20px; border-radius: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: background 0.18s;
+    }
+    .form-link:hover { background: var(--royal-dark); }
+
+    /* =====================================================
+       7. CONTACT
+       ===================================================== */
+    .contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
+    .contact-info, .contact-social { display: flex; flex-direction: column; gap: 16px; }
+    .contact-item { display: flex; gap: 18px; align-items: flex-start; padding: 22px; background: var(--bg2); border-radius: 12px; border: 1px solid var(--border); transition: background 0.18s; }
+    .contact-item:hover { background: var(--bg3); }
+    .contact-item-icon { width: 42px; height: 42px; background: var(--royal); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 19px; flex-shrink: 0; }
+    .contact-item h4 { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--royal); margin-bottom: 5px; font-weight: 500; }
+    .contact-item p { color: var(--text); font-size: 14px; word-break: break-word; }
+    .social-link {
+      display: flex; align-items: center; gap: 14px; padding: 17px 22px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      text-decoration: none; color: var(--text); font-size: 14px; font-weight: 500;
+      transition: border-color 0.18s, color 0.18s, transform 0.18s, background 0.3s;
+    }
+    .social-link:hover { border-color: var(--royal); color: var(--royal); transform: translateX(5px); }
+    .social-icon { font-size: 21px; color: var(--royal); }
+
+    /* =====================================================
+       8. LINKS
+       ===================================================== */
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+    .link-card {
+      display: flex; align-items: center; gap: 18px; padding: 22px 24px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      text-decoration: none; color: var(--text);
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.3s;
+    }
+    .link-card:hover { border-color: var(--royal); transform: translateX(5px); box-shadow: 0 4px 18px var(--royal-glow); }
+    .link-card h4 { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+    .link-badge { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; background: var(--bg2); color: var(--royal); padding: 3px 10px; border-radius: 50px; margin-bottom: 6px; display: inline-block; font-weight: 500; }
+    .link-arrow { margin-left: auto; color: var(--muted); font-size: 19px; flex-shrink: 0; }
+
+    /* =====================================================
+       9. ACCOMPLISHMENTS
+       ===================================================== */
+    .accomplishments-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .acc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; transition: transform 0.18s, box-shadow 0.18s, background 0.18s; }
+    .acc-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px var(--royal-glow); }
+    .acc-year { font-size: 12px; color: var(--royal); font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+    .acc-name { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--text); margin-bottom: 6px; }
+    .acc-desc { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    /* =====================================================
+       10. HISTORY
+       ===================================================== */
+    .history-intro {
+      background: linear-gradient(135deg, #0a1840, #1a3a8f); border-radius: 16px;
+      padding: 48px 44px; color: #fff; margin-bottom: 56px; position: relative; overflow: hidden;
+    }
+    [data-theme="dark"] .history-intro { background: linear-gradient(135deg, #040810, #0d1f50); border: 1px solid var(--border); }
+    .history-intro::before {
+      content: '1974'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      font-family: 'Playfair Display', serif; font-size: 140px; font-weight: 900;
+      color: rgba(255,255,255,0.06); pointer-events: none; user-select: none;
+    }
+    .history-intro h3 { font-family: 'Playfair Display', serif; font-size: 26px; margin-bottom: 14px; }
+    .history-intro p { color: rgba(255,255,255,0.75); font-size: 15px; line-height: 1.75; max-width: 620px; }
+
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--royal), rgba(26,58,143,0.1)); }
+    .timeline-item {
+      position: relative; margin-bottom: 36px; padding: 26px 28px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    }
+    .timeline-item:hover { transform: translateX(5px); box-shadow: 0 6px 20px var(--royal-glow); }
+    .timeline-dot { position: absolute; left: -28px; top: 28px; width: 16px; height: 16px; background: var(--royal); border-radius: 50%; border: 3px solid var(--bg); box-shadow: 0 0 0 2px var(--royal); }
+    .timeline-year { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--royal); font-weight: 500; margin-bottom: 7px; }
+    .timeline-item h4 { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--text); margin-bottom: 8px; }
+    .timeline-item p { color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+    /* =====================================================
+       11. GALLERY + LIGHTBOX
+       ===================================================== */
+    .upload-zone {
+      border: 2px dashed var(--border-strong); border-radius: 14px; padding: 40px; text-align: center;
+      cursor: pointer; color: var(--muted); margin-bottom: 28px; background: var(--bg2);
+      transition: border-color 0.18s, background 0.18s, color 0.18s;
+    }
+    .upload-zone:hover { border-color: var(--royal); background: var(--bg3); color: var(--royal); }
+    .upload-zone i { font-size: 36px; display: block; margin-bottom: 10px; }
+    .upload-zone span { font-size: 14px; }
+    #gallery-file-input { display: none; }
+
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .gallery-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--bg2); cursor: pointer; position: relative; aspect-ratio: 4/3; transition: transform 0.2s, box-shadow 0.2s; }
+    .gallery-card:hover { transform: scale(1.02); box-shadow: 0 10px 28px var(--royal-glow); }
+    .gallery-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .gallery-overlay { position: absolute; inset: auto 0 0 0; background: linear-gradient(transparent, rgba(10,24,70,0.82)); padding: 18px 14px 12px; color: #fff; opacity: 0; transition: opacity 0.2s; }
+    .gallery-card:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay span { font-size: 13px; font-weight: 500; }
+
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(4,8,20,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 2rem; }
+    .lightbox.open { display: flex; }
+    .lightbox-inner { max-width: 800px; width: 100%; position: relative; }
+    .lightbox-inner img { width: 100%; border-radius: 12px; display: block; }
+    .lightbox-close { position: absolute; top: -44px; right: 0; background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
+    .lightbox-close:hover { opacity: 1; }
+    .lightbox-caption { color: rgba(255,255,255,0.75); text-align: center; margin-top: 14px; font-size: 14px; }
+
+    /* =====================================================
+       12. FOOTER
+       ===================================================== */
+    .footer { background: var(--footer-bg); color: rgba(255,255,255,0.55); text-align: center; padding: 36px 2rem; font-size: 13px; border-top: 3px solid var(--royal); transition: background 0.3s; }
+    .footer strong { color: #fff; font-family: 'Playfair Display', serif; font-size: 17px; display: block; margin-bottom: 8px; }
+    .footer p { line-height: 1.8; }
+
+    /* =====================================================
+       13. RESPONSIVE
+       ===================================================== */
+    @media (max-width: 700px) {
+      .nav { padding: 10px 1rem; height: auto; flex-direction: column; gap: 8px; }
+      .nav-links { justify-content: center; }
+      .pillars { grid-template-columns: 1fr; }
+      .pillar { border-right: none; border-bottom: 1px solid var(--border); }
+      .contact-wrapper { grid-template-columns: 1fr; }
+      .hero { padding: 60px 1.2rem 72px; }
+      .section { padding: 48px 1.2rem; }
+      .history-intro { padding: 32px 24px; }
+      .officers-grid { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═════════ NAV ═════════ -->
+  <nav class="nav">
+    <div class="nav-brand">Φ Β Σ<span>Zeta Kappa Chapter</span></div>
+    <div class="nav-links">
+      <button class="active" data-page="home">Home</button>
+      <button data-page="officers">Officers</button>
+      <button data-page="forms">Forms</button>
+      <button data-page="contact">Contact</button>
+      <button data-page="links">Links</button>
+      <button data-page="accomplishments">Accomplishments</button>
+      <button data-page="history">History</button>
+      <button data-page="gallery">Gallery</button>
+    </div>
+    <button class="dm-toggle" id="dm-toggle" aria-label="Toggle dark mode">
+      <span class="dm-label" id="dm-label">Dark</span>
+      <div class="dm-switch"></div>
+    </button>
+  </nav>
+
+  <!-- ═════════ HOME ═════════ -->
+  <div id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero-badge">Est. 1974 · Zeta Kappa Chapter</div>
+      <h1>Phi Beta <em>Sigma</em><br>Fraternity, Inc.</h1>
+      <p class="hero-sub">Culture For Service &nbsp;·&nbsp; Service For Humanity</p>
+      <div class="hero-actions">
+        <button class="btn-primary" data-page="forms">Get Involved</button>
+        <button class="btn-outline" data-page="contact">Contact Us</button>
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon"><i class="ti ti-book"></i></div>
+        <h3>Scholarship</h3>
+        <p>Committed to academic excellence and the upliftment of our community through education.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon"><i class="ti ti-heart"></i></div>
+        <h3>Brotherhood</h3>
+        <p>A bond forged in service, loyalty, and an unwavering commitment to one another.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon"><i class="ti ti-world"></i></div>
+        <h3>Service</h3>
+        <p>Serving our communities with purpose — from local outreach to national programs.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Who We Are</div>
+        <h2>The World Famous Zeta Kappa</h2>
+        <p>Founded on the principles of Brotherhood, Scholarship, and Service, the Zeta Kappa Chapter proudly represents Phi Beta Sigma Fraternity, Inc. — making a lasting impact in our community and beyond.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num">1914</div><div class="stat-label">Founded Nationally</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-members">19</div><div class="stat-label">Active Brothers</div></div>
+        <div class="stat-card"><div class="stat-num">700+</div><div class="stat-label">Chapters Worldwide</div></div>
+        <div class="stat-card"><div class="stat-num">1974</div><div class="stat-label">Chartered at the University of Florida</div></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═════════ OFFICERS ═════════ -->
+  <div id="page-officers" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Leadership</div>
+        <h2>Chapter Officers</h2>
+        <p>Meet the 2026–2027 E-Board of the Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc.</p>
+      </div>
+      <div class="officers-grid" id="officers-grid"></div>
+    </section>
+  </div>
+
+  <!-- ═════════ FORMS ═════════ -->
+  <div id="page-forms" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Get Involved</div>
+        <h2>Chapter Forms</h2>
+        <p>Access our official Google Forms for interest, membership, events, and more.</p>
+      </div>
+      <div class="forms-grid" id="forms-grid"></div>
+    </section>
+  </div>
+
+  <!-- ═════════ CONTACT ═════════ -->
+  <div id="page-contact" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Reach Out</div>
+        <h2>Contact Us</h2>
+        <p>We'd love to hear from you. Connect with the Zeta Kappa Chapter directly.</p>
+      </div>
+      <div class="contact-wrapper">
+        <div class="contact-info" id="contact-info"></div>
+        <div class="contact-social" id="contact-social"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═════════ LINKS ═════════ -->
+  <div id="page-links" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Resources</div>
+        <h2>Important Links</h2>
+        <p>Official resources, community partners, and chapter information.</p>
+      </div>
+      <div class="links-grid" id="links-grid"></div>
+    </section>
+  </div>
+
+  <!-- ═════════ ACCOMPLISHMENTS ═════════ -->
+  <div id="page-accomplishments" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Achievements</div>
+        <h2>Brother Accomplishments</h2>
+        <p>Recognition of our brothers' accomplishments and the year they were achieved.</p>
+      </div>
+      <div class="accomplishments-grid" id="accomplishments-grid"></div>
+    </section>
+  </div>
+
+  <!-- ═════════ HISTORY ═════════ -->
+  <div id="page-history" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Our Story</div>
+        <h2>Chapter History</h2>
+        <p>From our founding on March 1st, 1974 at the University of Florida, here is the history of the Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc.</p>
+      </div>
+      <div class="history-intro">
+        <h3>The World Famous Zeta Kappa Chapter</h3>
+        <p id="history-body"></p>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </section>
+  </div>
+
+  <!-- ═════════ GALLERY ═════════ -->
+  <div id="page-gallery" class="page">
+    <section class="section">
+      <div class="section-header">
+        <div class="label">Memories</div>
+        <h2>Photo Gallery</h2>
+        <p>Brotherhood captured in moments — events, service, and fellowship of the Zeta Kappa Chapter.</p>
+      </div>
+      <div class="upload-zone" id="upload-zone">
+        <i class="ti ti-photo-plus"></i>
+        <span><strong>Click to upload photos</strong><br>JPG, PNG, GIF, WEBP supported</span>
+      </div>
+      <input type="file" id="gallery-file-input" accept="image/*" multiple />
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </section>
+  </div>
+
+  <!-- ═════════ LIGHTBOX ═════════ -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close"><i class="ti ti-x"></i></button>
+      <img id="lightbox-img" src="" alt="" />
+      <p class="lightbox-caption" id="lightbox-cap"></p>
+    </div>
+  </div>
+
+  <!-- ═════════ FOOTER ═════════ -->
+  <footer class="footer">
+    <strong>Φ Β Σ — Zeta Kappa Chapter</strong>
+    <p>Phi Beta Sigma Fraternity, Inc. &nbsp;·&nbsp; Culture For Service &nbsp;·&nbsp; Service For Humanity</p>
+  </footer>
+
+  <script>
+    /* =====================================================
+       1. SITE CONTENT — edit everything here
+       ===================================================== */
+    const data = {
+
+      officers: [
+        { title: 'President',          name: 'Saugat Shresta'   },
+        { title: '1st Vice President', name: 'Alvin Tuma'       },
+        { title: '2nd Vice President', name: 'Gabriel Henry'    },
+        { title: 'Treasurer',          name: 'Xciden Griffiths' },
+        { title: 'Secretary',          name: 'Jeremiah Samuel'  },
+        { title: 'Parliamentarian',    name: 'Geoffrey Pierre'  },
+      ],
+
+      forms: [
+        { title: 'Interest Form', desc: 'Interested in learning more about membership and what it entails? Start here.', url: '#', icon: 'ti-user-plus' },
+        { title: 'Event RSVP',    desc: 'RSVP for chapter events, socials, and programs.',                              url: '#', icon: 'ti-calendar-event' },
+      ],
+
+      contact: {
+        email:    'ufzetakappa1974@gmail.com',
+        phone:    '',                       // leave blank to hide the phone card
+        location: 'Gainesville, Florida',
+        socials: [
+          { label: '@ufsigmas',      icon: 'ti-brand-instagram', url: 'https://www.instagram.com/ufsigmas' },
+          { label: 'Zeta Kappa PBS', icon: 'ti-brand-facebook',  url: '#' },
+        ],
+      },
+
+      links: [
+        { title: 'Phi Beta Sigma National Website',      url: 'https://phibetasigma1914.org',                                   cat: 'Official'  },
+        { title: 'Crescent Magazine',                    url: 'https://phibetasigma1914.org/resources/the-crescent-magazine/',  cat: 'Events'    },
+        { title: 'Programming Information and Partners', url: 'https://phibetasigma1914.org/programs/',                         cat: 'Education' },
+        { title: 'PBS Impact Foundation',                url: 'https://www.pbsimpact.org/',                                     cat: 'Community' },
+      ],
+
+      accomplishments: [
+        { name: 'Xciden Griffiths', accomplishment: 'Mr. Rhomeo for the Lovely Lambda Rho Chapter of Sigma Gamma Rho Sorority, Inc.', year: 'Fall 2025' },
+        { name: 'Alvin Tuma',       accomplishment: 'Mr. Zeta Phi Beta for the Mighty Mu Epsilon Chapter of Zeta Phi Beta Sorority, Inc.', year: 'Spring 2025' },
+        { name: 'Geoffrey Pierre',  accomplishment: 'Initiate of the Zeta Chapter of the Order of Omega at the University of Florida', year: 'Fall 2026' },
+        { name: 'Khaleel Abiru',    accomplishment: 'NPHC Chapter President at the University of Florida', year: 'Fall 2026' },
+        { name: 'Bryce Cephus',     accomplishment: 'NPHC Historian at the University of Florida', year: 'Fall 2026' },
+      ],
+
+      history: {
+        body: 'The Zeta Kappa Chapter of Phi Beta Sigma Fraternity, Inc. stands as a proud pillar of Brotherhood, Scholarship, and Service. Since our chartering, we have worked tirelessly to uplift our community.',
+        timeline: [
+          {
+            year: 'January 9th, 1914',
+            title: 'Phi Beta Sigma Founded',
+            body: 'Phi Beta Sigma Fraternity, Inc. was founded on January 9, 1914 at Howard University in Washington, D.C. by Abram Langston Taylor, Leonard Francis Morse, and Charles Ignatius Brown.'
+          },
+          {
+            year: 'March 1st, 1974',
+            title: 'Zeta Kappa Chartered at the University of Florida',
+            body: 'The World Famous Zeta Kappa Chapter was chartered on March 1st, 1974 by 13 Degrees of Intellectual Blackness.'
+          },
+          {
+            year: 'February 23rd, 1993',
+            title: 'NPHC Chartered at the University of Florida',
+            body: 'The National Pan-Hellenic Council (NPHC) chapter at the University of Florida was chartered, consisting of Alpha Phi Alpha Fraternity, Inc.; Alpha Kappa Alpha Sorority, Inc.; Kappa Alpha Psi Fraternity, Inc.; Omega Psi Phi Fraternity, Inc.; Delta Sigma Theta Sorority, Inc.; Phi Beta Sigma Fraternity, Inc.; Zeta Phi Beta Sorority, Inc.; Sigma Gamma Rho Sorority, Inc.; and Iota Phi Theta Fraternity, Inc.'
+          },
+          {
+            year: 'January 14th, 2021',
+            title: 'Divine Nine Tribute Space',
+            body: 'An outdoor gathering space and physical tribute to the historically Black Greek-letter organizations known as the "Divine Nine" began serving the University of Florida community.'
+          },
+          {
+            year: 'March 1st, 2024',
+            title: 'Continuing the Legacy',
+            body: 'Brothers from over the last 50 years of Zeta Kappa came back to Gainesville for a conference celebrating the chapter\'s Brotherhood, Scholarship, and Service.'
+          },
+        ]
+      },
+
+      gallery: []   // filled at runtime by the upload box (not saved between visits)
+    };
+
+    /* =====================================================
+       2. HELPERS
+       ===================================================== */
+    const $ = id => document.getElementById(id);
+
+    function getInitials(name) {
+      return name.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'ΦΒ';
+    }
+
+    /* =====================================================
+       3. DARK MODE
+       ===================================================== */
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      $('dm-label').textContent = theme === 'dark' ? 'Light' : 'Dark';
+      try { localStorage.setItem('pbs-theme', theme); } catch (e) { /* storage unavailable */ }
+    }
+
+    function toggleDark() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      applyTheme(isDark ? 'light' : 'dark');
+    }
+
+    function loadSavedTheme() {
+      try {
+        const saved = localStorage.getItem('pbs-theme');
+        if (saved === 'dark' || saved === 'light') applyTheme(saved);
+      } catch (e) { /* storage unavailable */ }
+    }
+
+    /* =====================================================
+       4. NAVIGATION
+       ===================================================== */
+    function showPage(id) {
+      const page = $('page-' + id);
+      if (!page) return;
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-links button').forEach(b =>
+        b.classList.toggle('active', b.dataset.page === id));
+      page.classList.add('active');
+      window.scrollTo({ top: 0 });
+    }
+
+    /* =====================================================
+       5. RENDER FUNCTIONS (one per page)
+       ===================================================== */
+    function renderOfficers() {
+      $('officers-grid').innerHTML = data.officers.map(o => `
+        <div class="officer-card">
+          <div class="officer-avatar">${getInitials(o.name)}</div>
+          <div class="officer-pos">${o.title}</div>
+          <div class="officer-name">${o.name}</div>
+        </div>`).join('');
+    }
+
+    function renderForms() {
+      $('forms-grid').innerHTML = data.forms.map(f => `
+        <div class="form-card">
+          <div class="form-icon"><i class="ti ${f.icon}"></i></div>
+          <h3>${f.title}</h3>
+          <p>${f.desc}</p>
+          <a class="form-link" href="${f.url}" target="_blank" rel="noopener">
+            <i class="ti ti-external-link" style="font-size:15px;"></i> Open Form
+          </a>
+        </div>`).join('');
+    }
+
+    function renderContact() {
+      const c = data.contact;
+      const items = [
+        { icon: 'ti-mail',    label: 'Email',    value: c.email },
+        { icon: 'ti-phone',   label: 'Phone',    value: c.phone },
+        { icon: 'ti-map-pin', label: 'Location', value: c.location },
+      ].filter(i => i.value);
+
+      $('contact-info').innerHTML = items.map(i => `
+        <div class="contact-item">
+          <div class="contact-item-icon"><i class="ti ${i.icon}"></i></div>
+          <div><h4>${i.label}</h4><p>${i.value}</p></div>
+        </div>`).join('');
+
+      $('contact-social').innerHTML = c.socials.map(s => `
+        <a class="social-link" href="${s.url}" target="_blank" rel="noopener">
+          <i class="ti ${s.icon} social-icon"></i>${s.label}
+        </a>`).join('');
+    }
+
+    function renderLinks() {
+      $('links-grid').innerHTML = data.links.map(l => `
+        <a class="link-card" href="${l.url}" target="_blank" rel="noopener">
+          <div><div class="link-badge">${l.cat}</div><h4>${l.title}</h4></div>
+          <i class="ti ti-arrow-right link-arrow"></i>
+        </a>`).join('');
+    }
+
+    function renderAccomplishments() {
+      const g = $('accomplishments-grid');
+      if (!data.accomplishments.length) {
+        g.innerHTML = '<div class="empty-state">No accomplishments listed yet.</div>';
+        return;
+      }
+      g.innerHTML = data.accomplishments.map(a => `
+        <div class="acc-card">
+          <div class="acc-year">${a.year}</div>
+          <div class="acc-name">${a.name}</div>
+          <div class="acc-desc">${a.accomplishment}</div>
+        </div>`).join('');
+    }
+
+    function renderHistory() {
+      $('history-body').textContent = data.history.body;
+      $('timeline').innerHTML = data.history.timeline.map(t => `
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">${t.year}</div>
+          <h4>${t.title}</h4>
+          ${t.body ? `<p>${t.body}</p>` : ''}
+        </div>`).join('');
+    }
+
+    function renderGallery() {
+      const g = $('gallery-grid');
+      if (!data.gallery.length) {
+        g.innerHTML = `
+          <div class="empty-state">
+            <i class="ti ti-photo" style="font-size:48px;display:block;margin-bottom:14px;opacity:0.4;"></i>
+            <p>No photos yet. Use the upload area above to add your first photos.</p>
+          </div>`;
+        return;
+      }
+      g.innerHTML = data.gallery.map((img, i) => `
+        <div class="gallery-card" data-index="${i}">
+          <img src="${img.src}" alt="${img.caption}" loading="lazy" />
+          <div class="gallery-overlay"><span>${img.caption}</span></div>
+        </div>`).join('');
+    }
+
+    function renderAll() {
+      renderOfficers();
+      renderForms();
+      renderContact();
+      renderLinks();
+      renderAccomplishments();
+      renderHistory();
+      renderGallery();
+    }
+
+    /* =====================================================
+       6. GALLERY UPLOAD + LIGHTBOX
+       ===================================================== */
+    function handleImageUpload(event) {
+      Array.from(event.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          data.gallery.push({ src: e.target.result, caption: file.name.replace(/\.[^.]+$/, '') });
+          renderGallery();
+        };
+        reader.readAsDataURL(file);
+      });
+      event.target.value = '';
+    }
+
+    function openLightbox(i) {
+      const img = data.gallery[i];
+      if (!img) return;
+      $('lightbox-img').src = img.src;
+      $('lightbox-cap').textContent = img.caption;
+      $('lightbox').classList.add('open');
+    }
+
+    function closeLightbox() { $('lightbox').classList.remove('open'); }
+
+    /* =====================================================
+       7. EVENT LISTENERS + INIT
+       ===================================================== */
+    function bindEvents() {
+      // Any element with data-page switches pages (nav buttons + hero buttons)
+      document.querySelectorAll('[data-page]').forEach(el =>
+        el.addEventListener('click', () => showPage(el.dataset.page)));
+
+      $('dm-toggle').addEventListener('click', toggleDark);
+
+      $('upload-zone').addEventListener('click', () => $('gallery-file-input').click());
+      $('gallery-file-input').addEventListener('change', handleImageUpload);
+
+      $('gallery-grid').addEventListener('click', e => {
+        const card = e.target.closest('.gallery-card');
+        if (card) openLightbox(Number(card.dataset.index));
+      });
+
+      $('lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') closeLightbox(); });
+      $('lightbox-close').addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    }
+
+    loadSavedTheme();
+    renderAll();
+    bindEvents();
+  </script>
+</body>
+</html>
