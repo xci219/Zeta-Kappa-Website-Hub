@@ -301,15 +301,6 @@
     /* =====================================================
        11. GALLERY + LIGHTBOX
        ===================================================== */
-    .upload-zone {
-      border: 2px dashed var(--border-strong); border-radius: 14px; padding: 40px; text-align: center;
-      cursor: pointer; color: var(--muted); margin-bottom: 28px; background: var(--bg2);
-      transition: border-color 0.18s, background 0.18s, color 0.18s;
-    }
-    .upload-zone:hover { border-color: var(--royal); background: var(--bg3); color: var(--royal); }
-    .upload-zone i { font-size: 36px; display: block; margin-bottom: 10px; }
-    .upload-zone span { font-size: 14px; }
-    #gallery-file-input { display: none; }
 
     .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
     .gallery-card { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--bg2); cursor: pointer; position: relative; aspect-ratio: 4/3; transition: transform 0.2s, box-shadow 0.2s; }
@@ -326,6 +317,68 @@
     .lightbox-close { position: absolute; top: -44px; right: 0; background: none; border: none; color: #fff; font-size: 28px; cursor: pointer; opacity: 0.8; }
     .lightbox-close:hover { opacity: 1; }
     .lightbox-caption { color: rgba(255,255,255,0.75); text-align: center; margin-top: 14px; font-size: 14px; }
+
+    /* =====================================================
+       11b. SITE-WIDE RIPPLE EFFECT
+       ===================================================== */
+    .ripple {
+      position: fixed; width: 24px; height: 24px; margin: -12px 0 0 -12px;
+      border-radius: 50%; border: 2px solid var(--royal-light);
+      pointer-events: none; z-index: 2000;
+      animation: rippleOut 0.9s ease-out forwards;
+    }
+    .ripple::after {
+      content: ''; position: absolute; inset: -2px; border-radius: 50%;
+      border: 2px solid var(--royal-light); opacity: 0;
+      animation: rippleOut 0.9s ease-out 0.15s forwards;
+    }
+    @keyframes rippleOut {
+      0%   { transform: scale(0.3); opacity: 0.85; }
+      100% { transform: scale(7);   opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { .ripple, .ripple::after { display: none; } }
+
+    /* =====================================================
+       11c. DECOR (floating symbols, ornaments) + CLICK POPS
+       ===================================================== */
+    .decor { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+    .decor-item, .hero-float {
+      position: absolute; font-family: 'Playfair Display', serif; font-weight: 900; line-height: 1;
+      animation: drift var(--dur, 9s) ease-in-out var(--delay, 0s) infinite alternate;
+    }
+    .decor-item { color: var(--royal); opacity: 0.07; }
+    [data-theme="dark"] .decor-item { opacity: 0.1; }
+    .hero-float { color: rgba(255,255,255,0.12); }
+    .decor-item svg, .hero-float svg, .ornament svg, .pop svg { width: 1em; height: 1em; display: block; }
+    @keyframes drift {
+      from { transform: translateY(0) rotate(var(--rot, 0deg)); }
+      to   { transform: translateY(-26px) rotate(calc(var(--rot, 0deg) + 14deg)); }
+    }
+
+    .ornament {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin-top: 14px; color: var(--royal); font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700;
+    }
+    .ornament::before, .ornament::after { content: ''; width: 52px; height: 1px; background: var(--border-strong); }
+    .footer .ornament { color: #a8c0ff; margin: 0 0 12px; }
+    .footer .ornament::before, .footer .ornament::after { background: rgba(255,255,255,0.25); }
+
+    .pop {
+      position: fixed; z-index: 2001; pointer-events: none;
+      font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1;
+      font-size: var(--size, 22px); color: var(--royal-light);
+      animation: popOut 0.85s ease-out forwards;
+    }
+    @keyframes popOut {
+      0%   { opacity: 1; transform: translate(-50%, -50%) scale(0.4) rotate(0deg); }
+      65%  { opacity: 1; }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.1) rotate(var(--rot, 0deg)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .decor-item, .hero-float { animation: none; }
+      .pop { display: none; }
+    }
 
     /* =====================================================
        12. FOOTER
@@ -504,11 +557,6 @@
         <h2>Photo Gallery</h2>
         <p>Brotherhood captured in moments — events, service, and fellowship of the Zeta Kappa Chapter.</p>
       </div>
-      <div class="upload-zone" id="upload-zone">
-        <i class="ti ti-photo-plus"></i>
-        <span><strong>Click to upload photos</strong><br>JPG, PNG, GIF, WEBP supported</span>
-      </div>
-      <input type="file" id="gallery-file-input" accept="image/*" multiple />
       <div class="gallery-grid" id="gallery-grid"></div>
     </section>
   </div>
@@ -609,8 +657,18 @@
         ]
       },
 
-      gallery: []   // filled at runtime by the upload box (not saved between visits)
+      /* GALLERY
+         1. Put your photos in a folder named  images/gallery  next to index.html
+         2. Add one line per photo below: the file name and a caption.
+         3. To remove a photo, delete its line (and optionally the file).
+         Photos stay on the site until you remove them here. */
+      gallery: [
+        // { file: 'homecoming-2025.jpg', caption: 'Homecoming 2025' },
+        // { file: 'service-day.jpg',     caption: 'Community Service Day' },
+      ]
     };
+
+    const GALLERY_FOLDER = 'images/gallery/';   // where your photos live
 
     /* =====================================================
        2. HELPERS
@@ -738,13 +796,13 @@
         g.innerHTML = `
           <div class="empty-state">
             <i class="ti ti-photo" style="font-size:48px;display:block;margin-bottom:14px;opacity:0.4;"></i>
-            <p>No photos yet. Use the upload area above to add your first photos.</p>
+            <p>No photos yet. Add your images to <code>images/gallery</code> and list them in the <code>gallery</code> section of the script.</p>
           </div>`;
         return;
       }
       g.innerHTML = data.gallery.map((img, i) => `
         <div class="gallery-card" data-index="${i}">
-          <img src="${img.src}" alt="${img.caption}" loading="lazy" />
+          <img src="${GALLERY_FOLDER}${img.file}" alt="${img.caption}" loading="lazy" />
           <div class="gallery-overlay"><span>${img.caption}</span></div>
         </div>`).join('');
     }
@@ -760,29 +818,114 @@
     }
 
     /* =====================================================
-       6. GALLERY UPLOAD + LIGHTBOX
+       6. GALLERY LIGHTBOX
        ===================================================== */
-    function handleImageUpload(event) {
-      Array.from(event.target.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          data.gallery.push({ src: e.target.result, caption: file.name.replace(/\.[^.]+$/, '') });
-          renderGallery();
-        };
-        reader.readAsDataURL(file);
-      });
-      event.target.value = '';
-    }
-
     function openLightbox(i) {
       const img = data.gallery[i];
       if (!img) return;
-      $('lightbox-img').src = img.src;
+      $('lightbox-img').src = GALLERY_FOLDER + img.file;
       $('lightbox-cap').textContent = img.caption;
       $('lightbox').classList.add('open');
     }
 
     function closeLightbox() { $('lightbox').classList.remove('open'); }
+
+    /* =====================================================
+       6b. SITE-WIDE RIPPLE, POPS + DECOR (any page)
+       ===================================================== */
+    let lastPointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+    function spawnRipple(x, y) {
+      const ring = document.createElement('div');
+      ring.className = 'ripple';
+      ring.style.left = x + 'px';
+      ring.style.top = y + 'px';
+      document.body.appendChild(ring);
+      setTimeout(() => ring.remove(), 1200);
+    }
+
+    /* Symbols used for decor + pops: sigma, phi, beta, and the crescent */
+    const CRESCENT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+    const SYMBOLS = ['Σ', CRESCENT, 'Φ', CRESCENT, 'Β'];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function makePop(html, x, y, dx, dy, size, rot, life) {
+      if (reduceMotion) return;
+      const el = document.createElement('div');
+      el.className = 'pop';
+      el.innerHTML = html;
+      el.style.cssText = `left:${x}px;top:${y}px;--dx:${dx}px;--dy:${dy}px;--size:${size}px;--rot:${rot}deg;`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), life || 1000);
+    }
+
+    // Every click: a small burst of Σ / Φ / Β / crescents flies outward
+    function popBurst(x, y) {
+      const count = 6;
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.8;
+        const dist = 50 + Math.random() * 50;
+        makePop(SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)], x, y,
+                Math.cos(angle) * dist, Math.sin(angle) * dist,
+                16 + Math.random() * 12, Math.round((Math.random() - 0.5) * 120));
+      }
+    }
+
+    // Every key press: the key itself pops up and floats away
+    function popKey(label, x, y) {
+      makePop(label, x, y, (Math.random() - 0.5) * 40, -80, 32, Math.round((Math.random() - 0.5) * 30));
+    }
+
+    // Decorative symbols: faint floating background + hero + ornaments + footer
+    function buildDecor() {
+      const layer = document.createElement('div');
+      layer.className = 'decor';
+      layer.setAttribute('aria-hidden', 'true');
+      // [symbol index, left %, top %, size px, rotation deg, duration s, delay s]
+      const spots = [
+        [0, 4, 12, 90, -10, 9, 0],   [1, 90, 8, 80, 20, 11, 1],  [2, 12, 48, 70, 8, 10, 2],
+        [3, 82, 42, 100, -25, 12, 0.5], [4, 6, 82, 74, 12, 9, 1.5], [0, 88, 80, 96, 15, 10, 2.5],
+        [1, 46, 6, 56, -15, 13, 3],  [2, 52, 88, 66, 6, 11, 0.8], [3, 28, 28, 48, 30, 12, 1.2],
+        [4, 68, 62, 52, -8, 10, 2.2],[0, 70, 20, 44, 18, 9, 3.2], [1, 22, 68, 58, -20, 12, 0.3],
+      ];
+      layer.innerHTML = spots.map(([i, l, t, size, rot, dur, delay]) =>
+        `<div class="decor-item" style="left:${l}%;top:${t}%;font-size:${size}px;--rot:${rot}deg;--dur:${dur}s;--delay:${delay}s">${SYMBOLS[i]}</div>`
+      ).join('');
+      document.body.prepend(layer);
+
+      // Hero corners
+      const hero = document.querySelector('.hero');
+      if (hero) {
+        const heroSpots = [[1, 6, 14, 54, -12], [0, 90, 18, 46, 10], [1, 12, 70, 40, 20], [2, 84, 68, 50, -8], [4, 50, 8, 34, 6]];
+        hero.insertAdjacentHTML('beforeend', heroSpots.map(([i, l, t, size, rot], n) =>
+          `<div class="hero-float" style="left:${l}%;top:${t}%;font-size:${size}px;--rot:${rot}deg;--dur:${8 + n}s;--delay:${n * 0.7}s">${SYMBOLS[i]}</div>`
+        ).join(''));
+      }
+
+      // Ornament under every section heading, and in the footer
+      const ornament = `<div class="ornament" aria-hidden="true"><span>Φ</span>${CRESCENT}<span>Σ</span>${CRESCENT}<span>Β</span></div>`;
+      document.querySelectorAll('.section-header h2').forEach(h => h.insertAdjacentHTML('afterend', ornament));
+      const footerTitle = document.querySelector('.footer strong');
+      if (footerTitle) footerTitle.insertAdjacentHTML('beforebegin', ornament);
+    }
+
+    function bindRipple() {
+      document.addEventListener('pointerdown', e => {
+        lastPointer = { x: e.clientX, y: e.clientY };
+        spawnRipple(e.clientX, e.clientY);
+        popBurst(e.clientX, e.clientY);
+      });
+      document.addEventListener('pointermove', e => {
+        lastPointer = { x: e.clientX, y: e.clientY };
+      });
+      document.addEventListener('keydown', e => {
+        if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+        if (e.key.length !== 1) return;
+        if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+        spawnRipple(lastPointer.x, lastPointer.y);
+        popKey(e.key.toUpperCase(), lastPointer.x, lastPointer.y);
+      });
+    }
 
     /* =====================================================
        7. EVENT LISTENERS + INIT
@@ -793,9 +936,6 @@
         el.addEventListener('click', () => showPage(el.dataset.page)));
 
       $('dm-toggle').addEventListener('click', toggleDark);
-
-      $('upload-zone').addEventListener('click', () => $('gallery-file-input').click());
-      $('gallery-file-input').addEventListener('change', handleImageUpload);
 
       $('gallery-grid').addEventListener('click', e => {
         const card = e.target.closest('.gallery-card');
@@ -810,6 +950,8 @@
     loadSavedTheme();
     renderAll();
     bindEvents();
+    buildDecor();
+    bindRipple();
   </script>
 </body>
 </html>
